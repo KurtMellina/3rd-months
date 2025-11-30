@@ -46,6 +46,7 @@ if (closeLetterBtn) {
             // Start other animations
             initFloatingHearts();
             initSparkles();
+            initFloatingBubbles();
             // Initialize carousel
             initCarousel();
         }, 500);
@@ -213,13 +214,14 @@ window.addEventListener('load', () => {
 
 // Floating Hearts Animation
 function createFloatingHeart() {
-    const hearts = ['💜', '💕', '💖', '💗', '💝', '💞', '💓', '💘'];
+    const hearts = ['💜', '💕', '💖', '💗', '💝', '💞', '💓', '💘', '💟', '💌'];
     const heart = document.createElement('div');
     heart.className = 'floating-heart';
     heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
     heart.style.left = Math.random() * 100 + '%';
     heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
     heart.style.animationDelay = Math.random() * 2 + 's';
+    heart.style.filter = 'drop-shadow(0 0 10px rgba(255, 182, 193, 0.6))';
     
     const floatingHeartsContainer = document.getElementById('floatingHearts');
     if (floatingHeartsContainer) {
@@ -233,12 +235,12 @@ function createFloatingHeart() {
 
 // Initialize floating hearts (only after envelope is closed)
 function initFloatingHearts() {
-    // Create floating hearts periodically
-    setInterval(createFloatingHeart, 2000);
+    // Create floating hearts more frequently for romantic effect
+    setInterval(createFloatingHeart, 1500);
     
-    // Create initial floating hearts
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => createFloatingHeart(), i * 400);
+    // Create more initial floating hearts
+    for (let i = 0; i < 10; i++) {
+        setTimeout(() => createFloatingHeart(), i * 300);
     }
 }
 
@@ -271,6 +273,105 @@ function initSparkles() {
         setTimeout(() => createSparkle(), i * 100);
     }
 }
+
+// Floating Bubbles with Pictures
+const bubbleImages = [
+    'IMG_20251127_012524_012.webp',
+    'IMG_20251017_192529_504.jpg',
+    'IMG_20251017_192526_717.jpg',
+    'IMG_20251017_180438_045.jpg',
+    'IMG_20250911_171642_348.jpg',
+    'IMG_20250911_165518_240.jpg',
+    'IMG_20250817_225651_872.jpg',
+    'IMG_20250817_225650_128.jpg',
+    'IMG_20250817_225648_428.jpg',
+    '1000003674.jpg',
+    '1000003672.jpg'
+];
+
+// Romantic quotes for interactive elements
+const romanticQuotes = [
+    "You are my sunshine 💜",
+    "Forever and always 💕",
+    "My heart belongs to you 💖",
+    "You make everything better 💗",
+    "I love you more each day 💝"
+];
+
+function createFloatingBubble() {
+    const bubble = document.createElement('div');
+    bubble.className = 'floating-bubble';
+    
+    // Random size between 60px and 120px
+    const size = Math.random() * 60 + 60;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    
+    // Random starting position
+    bubble.style.left = Math.random() * 100 + '%';
+    
+    // Random animation duration
+    const duration = Math.random() * 5 + 12; // 12-17 seconds
+    bubble.style.animationDuration = duration + 's';
+    bubble.style.animationDelay = Math.random() * 3 + 's';
+    
+    // Random horizontal drift
+    const drift = (Math.random() - 0.5) * 200;
+    bubble.style.setProperty('--drift', drift + 'px');
+    
+    // Add random image
+    const randomImage = bubbleImages[Math.floor(Math.random() * bubbleImages.length)];
+    const img = document.createElement('img');
+    img.src = randomImage;
+    img.alt = 'Our Memory';
+    img.loading = 'lazy';
+    
+    bubble.appendChild(img);
+    
+    const floatingBubblesContainer = document.getElementById('floatingBubbles');
+    if (floatingBubblesContainer) {
+        floatingBubblesContainer.appendChild(bubble);
+        
+        // Remove bubble after animation completes
+        setTimeout(() => {
+            bubble.remove();
+        }, (duration + 3) * 1000);
+    }
+}
+
+// Initialize floating bubbles (only after envelope is closed)
+function initFloatingBubbles() {
+    // Create floating bubbles periodically (more frequently for romantic effect)
+    setInterval(createFloatingBubble, 2500);
+    
+    // Create initial floating bubbles
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => createFloatingBubble(), i * 500);
+    }
+}
+
+// Add romantic quote interaction to quote cards
+const quoteCards = document.querySelectorAll('.quote-card');
+quoteCards.forEach((card, index) => {
+    card.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        // Create heart burst
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                createClickHeart(
+                    rect.left + rect.width / 2 + (Math.random() - 0.5) * 200,
+                    rect.top + rect.height / 2 + (Math.random() - 0.5) * 200
+                );
+            }, i * 30);
+        }
+        
+        // Add romantic glow effect
+        this.style.boxShadow = '0 20px 60px rgba(255, 182, 193, 0.6), 0 0 60px rgba(147, 51, 234, 0.5)';
+        setTimeout(() => {
+            this.style.boxShadow = '';
+        }, 1000);
+    });
+});
 
 // Click Heart Button Interaction
 const heartButton = document.getElementById('heartButton');
@@ -486,7 +587,7 @@ function animateCounter() {
     const counter = document.getElementById('daysCounter');
     if (counter) {
         let currentValue = parseInt(counter.textContent);
-        let targetValue = 90;
+        let targetValue = 120;
         let increment = targetValue / 30;
         let current = 0;
         
